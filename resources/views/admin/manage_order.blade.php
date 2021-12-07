@@ -22,7 +22,7 @@
         <thead>
           <tr>
            
-            <th>Thứ tự</th>
+            <th>Thứ tự-</th>
             <th>Tên người đặt</th>
             <th>Tổng giá tiền</th>
             <th>Tình trạng đơn hàng</th>
