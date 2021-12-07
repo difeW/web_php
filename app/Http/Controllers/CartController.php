@@ -68,7 +68,7 @@ class CartController extends Controller
         $data = $request->all();
         $session_id = substr(md5(microtime()),rand(0,26),5);
         $cart = Session::get('cart');
-        if($cart==true){
+        if($cart == true){
             $is_avaiable = 0;
             foreach($cart as $key => $val){
                 if($val['product_id']==$data['cart_product_id']){
@@ -81,11 +81,10 @@ class CartController extends Controller
                 'product_name' => $data['cart_product_name'],
                 'product_id' => $data['cart_product_id'],
                 'product_image' => $data['cart_product_image'],
-                'product_quantity' => $data['cart_product_quantity'],
                 'product_qty' => $data['cart_product_qty'],
                 'product_price' => $data['cart_product_price'],
                 );
-                $_SESSION['cart'] = $cart;
+                Session::put('cart', $cart);
             }
         }else{
             $cart[] = array(
@@ -93,15 +92,12 @@ class CartController extends Controller
                 'product_name' => $data['cart_product_name'],
                 'product_id' => $data['cart_product_id'],
                 'product_image' => $data['cart_product_image'],
-                'product_quantity' => $data['cart_product_quantity'],
                 'product_qty' => $data['cart_product_qty'],
                 'product_price' => $data['cart_product_price'],
             );
-            $_SESSION['cart'] = $cart;
         }
-       
+        Session::put('cart', $cart);
         Session::save();
-
     }   
     public function delete_product($session_id){
         $cart = Session::get('cart');
@@ -114,7 +110,7 @@ class CartController extends Controller
                     unset($cart[$key]);
                 }
             }
-            $_SESSION['cart'] = $cart;
+            Session::put('cart',$cart);
             return redirect()->back()->with('message','Xóa sản phẩm thành công');
 
         }else{
@@ -124,7 +120,7 @@ class CartController extends Controller
     }
     public function update_cart(Request $request){
         $data = $request->all();
-        $cart = $_SESSION::get('cart');
+        $cart = Session::get('cart');
         if($cart==true){
             $message = '';
 
@@ -133,12 +129,12 @@ class CartController extends Controller
                 foreach($cart as $session => $val){
                     $i++;
 
-                    if($val['session_id']==$key && $qty<$cart[$session]['product_quantity']){
+                    if($val['session_id']==$key ){
 
                         $cart[$session]['product_qty'] = $qty;
                         $message.='<p style="color:blue">'.$i.') Cập nhật số lượng :'.$cart[$session]['product_name'].' thành công</p>';
 
-                    }elseif($val['session_id']==$key && $qty>$cart[$session]['product_quantity']){
+                    }elseif($val['session_id']==$key && $qty>$cart[$session]['product_qty']){
                         $message.='<p style="color:red">'.$i.') Cập nhật số lượng :'.$cart[$session]['product_name'].' thất bại</p>';
                     }
 
@@ -146,7 +142,7 @@ class CartController extends Controller
 
             }
 
-            $_SESSION['cart'] = $cart;
+            Session::put('cart',$cart);
             return redirect()->back()->with('message',$message);
         }else{
             return redirect()->back()->with('message','Cập nhật số lượng thất bại');
@@ -155,7 +151,6 @@ class CartController extends Controller
     public function delete_all_product(){
         $cart = Session::get('cart');
         if($cart==true){
-            // Session::destroy();
             Session::forget('cart');
             Session::forget('coupon');
             return redirect()->back()->with('message','Xóa hết giỏ thành công');
@@ -171,8 +166,6 @@ class CartController extends Controller
         $product_info = DB::table('tbl_product')->where('product_id',$productId)->first(); 
 
     
-        // Cart::add('293ad', 'Product 1', 1, 9.99, 550);
-        // Cart::destroy();
         $data['id'] = $product_info->product_id;
         $data['qty'] = $quantity;
         $data['name'] = $product_info->product_name;
@@ -180,10 +173,7 @@ class CartController extends Controller
         $data['weight'] = $product_info->product_price;
         $data['options']['image'] = $product_info->product_image;
         Cart::add($data);
-        // Cart::destroy();
         return Redirect::to('/show-cart');
-     //Cart::destroy();
-       
     }
     public function show_cart(Request $request){
         //seo 

@@ -23,8 +23,8 @@
           <tr>
            
             <th>Thứ tự</th>
-            <th>Mã đơn hàng</th>
-            <th>Ngày tháng đặt hàng</th>
+            <th>Tên người đặt</th>
+            <th>Tổng giá tiền</th>
             <th>Tình trạng đơn hàng</th>
 
             <th style="width:30px;"></th>
@@ -40,21 +40,16 @@
             @endphp
           <tr>
             <td><i>{{$i}}</i></label></td>
-            <td>{{ $ord->order_code }}</td>
-            <td>{{ $ord->created_at }}</td>
-            <td>@if($ord->order_status==1)
-                    Đơn hàng mới
-                @else 
-                    Đã xử lý
-                @endif
-            </td>
+            <td>{{ $ord->customer_name}}</td>
+            <td>{{ $ord->order_total }}</td>
+            <td>{{ $ord->order_status }}</td>
            
            
             <td>
-              <a href="{{URL::to('/view-order/'.$ord->order_code)}}" class="active styling-edit" ui-toggle-class="">
+              <a href="{{URL::to('/view-order/'.$ord->order_id)}}" class="active styling-edit" ui-toggle-class="">
                 <i class="fa fa-eye text-success text-active"></i></a>
 
-              <a onclick="return confirm('Bạn có chắc là muốn xóa đơn hàng này ko?')" href="{{URL::to('/delete-order/'.$ord->order_code)}}" class="active styling-edit" ui-toggle-class="">
+              <a onclick="return confirm('Bạn có chắc là muốn xóa đơn hàng này ko?')" href="{{URL::to('/delete-order/'.$ord->order_id)}}" class="active styling-edit" ui-toggle-class="">
                 <i class="fa fa-times text-danger text"></i>
               </a>
 
@@ -72,7 +67,7 @@
         </div>
         <div class="col-sm-7 text-right text-center-xs">                
           <ul class="pagination pagination-sm m-t-none m-b-none">
-            {!!$order->links()!!}
+           
           </ul>
         </div>
       </div>

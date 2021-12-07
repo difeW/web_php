@@ -28,8 +28,6 @@ class BrandProduct extends Controller
         $all_brand_product = Brand :: All();
     	$manager_brand_product  = view('admin.all_brand_product')->with('all_brand_product',$all_brand_product);
     	return view('admin_layout')->with('admin.all_brand_product', $manager_brand_product);
-
-
     }
     public function save_brand_product(Request $request){
         $this->AuthLogin();
@@ -101,7 +99,7 @@ class BrandProduct extends Controller
         
         $brand_by_id = DB::table('tbl_product')->join('tbl_brand','tbl_product.brand_id','=','tbl_brand.brand_id')->where('tbl_brand.brand_id',$brand_id)->paginate(6);
 
-
+        $brand_name = DB::table('tbl_brand')->where('tbl_brand.brand_id',$brand_id)->limit(1)->get();
         foreach($brand_name as $key => $val){
             //seo 
             $meta_desc = $val->brand_desc; 

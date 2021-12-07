@@ -27,7 +27,18 @@
     <link href="{{asset('frontend/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('frontend/css/responsive.css')}}" rel="stylesheet">
     <link href="{{asset('frontend/css/sweetalert.css')}}" rel="stylesheet">
-   
+    <style>
+  /* Note: Try to remove the following lines to see the effect of CSS positioning */
+    .affix {
+        top: 0;
+        width: 100%;
+        z-index: 9999 !important;
+    }
+
+    .affix + .container-fluid {
+        padding-top: 70px;
+    }
+    </style>
 
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -150,7 +161,7 @@
         <div class="header-bottom"><!--header-bottom-->
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-7">
+                    <div class="col-sm-7" data-offset-top="170" data-spy="affix">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                                 <span class="sr-only">Toggle navigation</span>
@@ -190,7 +201,6 @@
             </div>
         </div><!--/header-bottom-->
     </header><!--/header-->
-    
     <section id="slider">
         <div class="container">
             <div class="row">
@@ -448,6 +458,8 @@
 
 
     <script src="{{asset('frontend/js/sweetalert.min.js')}}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    {{--  <script src="https://www.paypal.com/sdk/js?client-id=sb"></script>
     <script>paypal.Buttons().render('body');</script> --}}
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -509,12 +521,21 @@
     
 
     </script>
+    <script  type="text/javascript">
+        $(document).ready(function(){
+            //alert('1');
+            $('.add-to-cart').click(function(){
+                $.ajax({url: "demo_test.txt", success: function(url){
+                    alert('1');
+                }});
+            });
+        });
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('.add-to-cart').click(function(){
-
                 var id = $(this).data('id_product');
-                // alert(id);
+                
                 var cart_product_id = $('.cart_product_id_' + id).val();
                 var cart_product_name = $('.cart_product_name_' + id).val();
                 var cart_product_image = $('.cart_product_image_' + id).val();
@@ -522,35 +543,27 @@
                 var cart_product_price = $('.cart_product_price_' + id).val();
                 var cart_product_qty = $('.cart_product_qty_' + id).val();
                 var _token = $('input[name="_token"]').val();
-                if(parseInt(cart_product_qty)>parseInt(cart_product_quantity)){
-                    alert('Làm ơn đặt nhỏ hơn ' + cart_product_quantity);
-                }else{
-
-                    $.ajax({
-                        url: '{{url('/add-cart-ajax')}}',
-                        method: 'POST',
-                        data:{cart_product_id:cart_product_id,cart_product_name:cart_product_name,cart_product_image:cart_product_image,cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token,cart_product_quantity:cart_product_quantity},
-                        success:function(){
-
-                            swal({
-                                    title: "Đã thêm sản phẩm vào giỏ hàng",
-                                    text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
-                                    showCancelButton: true,
-                                    cancelButtonText: "Xem tiếp",
-                                    confirmButtonClass: "btn-success",
-                                    confirmButtonText: "Đi đến giỏ hàng",
-                                    closeOnConfirm: false
-                                },
-                                function() {
-                                    window.location.href = "{{url('/gio-hang')}}";
-                                });
-
-                        }
-
-                    });
-                }
-
-                
+                $.ajax({
+                    url: "{{url('/add-cart-ajax')}}",
+                    method : "POST",
+                    data:{cart_product_id:cart_product_id,cart_product_name:cart_product_name,cart_product_image:cart_product_image,cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token,cart_product_quantity:cart_product_quantity},
+                    success: function(){   
+                        Swal.fire({
+                            title: "Đã thêm sản phẩm vào giỏ hàng",
+                            text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+                            showCancelButton: true,
+                            cancelButtonText: "Xem tiếp",
+                            confirmButtonClass: "btn-success",
+                            confirmButtonText: "Đi đến giỏ hàng",
+                            closeOnConfirm: false
+                        }).then((t)=>{
+                            if(t.isConfirmed)
+                            {
+                                window.location.href = "{{url('/gio-hang')}}";
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>
@@ -601,6 +614,5 @@
         });
     });
     </script>
-  
 </body>
 </html>

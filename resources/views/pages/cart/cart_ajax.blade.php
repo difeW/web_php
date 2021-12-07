@@ -42,12 +42,11 @@
 						@foreach(Session::get('cart') as $key => $cart)
 							<?php
 								$subtotal = $cart['product_price'] * $cart['product_qty']; 
-								$total+=$subtotal;	
+								$total += $subtotal;	
 							?>
-
 						<tr>
 							<td class="cart_product">
-								<img src="{{asset('public/uploads/product/'.$cart['product_image'])}}" width="90" alt="{{$cart['product_name']}}" />
+								<img src="{{asset('/public/uploads/product/'.$cart['product_image'])}}" width="90" alt="{{$cart['product_name']}}" />
 							</td>
 							<td class="cart_description">
 								<h4><a href=""></a></h4>
@@ -55,7 +54,7 @@
 							</td>
 							<td class="cart_description">
 								<h4><a href=""></a></h4>
-								<p>{{$cart['product_quantity']}}</p>
+								<p>{{$cart['product_qty']}}</p>
 							</td>
 							<td class="cart_price">
 								<p>{{number_format($cart['product_price'],0,',','.')}}đ</p>
@@ -149,7 +148,7 @@
 					
 
 				</form>
-					@if(Session::get('cart'))
+					@if(Session::get('car'))
 					<tr><td>
 
 							<form method="POST" action="{{url('/check-coupon')}}">

@@ -10,8 +10,9 @@
                            
                                 <div class="single-products">
                                         <div class="productinfo text-center">
-                                            <form action="{{URL::to('/save-cart')}}" method="POST">
+                                            <form>
                                                 @csrf
+                                            <input type="hidden" name="product_id" value="{{$product->product_id}}" class="product_id">
                                             <input type="hidden" name="productid_hidden" value="{{$product->product_id}}" class="cart_product_id_{{$product->product_id}}">
                                             <input type="hidden" value="{{$product->product_name}}" class="cart_product_name_{{$product->product_id}}">
                                             <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->product_id}}">
@@ -23,9 +24,9 @@
                                                 <h2>{{number_format($product->product_price,0,',','.').' '.'VNĐ'}}</h2>
                                                 <p>{{$product->product_name}}</p>
 
-                                             
+
                                              </a>
-                                            <input type="submit" value="Thêm giỏ hàng" class="btn btn-default add-to-cart" data-id_product="{{$product->product_id}}" name="add-to-cart">
+                                            <a hef="#" class="btn btn-default add-to-cart" data-id_product="{{$product->product_id}}">Thêm giỏ hàng</a>
                                             </form>
 
                                         </div>

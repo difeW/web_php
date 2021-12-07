@@ -8,7 +8,7 @@
 
                         @endforeach
                         @foreach($brand_by_id as $key => $product)
-                        <a href="{{URL::to('/chi-tiet/'.$product->product_slug)}}">
+                        <a href="{{URL::to('/chi-tiet/'.$product->product_id)}}">
                         <div class="col-sm-4">
                             <div class="product-image-wrapper">
                            
@@ -22,7 +22,7 @@
                                             <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->product_id}}">
                                             <input type="hidden" value="1" class="cart_product_qty_{{$product->product_id}}">
 
-                                            <a href="{{URL::to('/chi-tiet/'.$product->product_slug)}}">
+                                            <a href="{{URL::to('/chi-tiet/'.$product->product_id)}}">
                                                 <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}" alt="" />
                                                 <h2>{{number_format($product->product_price,0,',','.').' '.'VNĐ'}}</h2>
                                                 <p>{{$product->product_name}}</p>

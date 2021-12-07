@@ -93,7 +93,7 @@ Route::post('/update-brand-product/{brand_product_id}',[App\Http\Controllers\Bra
 // });
 Route::get('users',
 		[
-			'uses'=>'UserController@index',
+			'uses'=>[App\Http\Controllers\UserController::class, 'index'],
 			'as'=> 'Users',
 			'middleware'=> 'roles'
 			// 'roles' => ['admin','author']
@@ -112,7 +112,7 @@ Route::post('/save-product',[App\Http\Controllers\ProductController::class, 'sav
 Route::post('/update-product/{product_id}',[App\Http\Controllers\ProductController::class, 'update_product']);
 
 //Coupon
-Route::get('/check-coupon',[App\Http\Controllers\CartController::class, 'check_coupon']);
+Route::post('/check-coupon',[App\Http\Controllers\CartController::class, 'check_coupon']);
 
 Route::get('/unset-coupon',[App\Http\Controllers\CouponController::class, 'unset_coupon']);
 Route::get('/insert-coupon',[App\Http\Controllers\CouponController::class, 'insert_coupon']);
@@ -147,10 +147,10 @@ Route::post('/select-delivery-home',[App\Http\Controllers\CheckoutController::cl
 Route::post('/confirm-order',[App\Http\Controllers\CheckoutController::class, 'confirm_order']);
 
 //Order
-Route::get('/delete-order/{order_code}',[App\Http\Controllers\OrderController::class, 'order_code']);
+Route::get('/delete-order/{order_id}',[App\Http\Controllers\OrderController::class, 'order_code']);
 Route::get('/print-order/{checkout_code}',[App\Http\Controllers\OrderController::class, 'print_order']);
 Route::get('/manage-order',[App\Http\Controllers\OrderController::class, 'manage_order']);
-Route::get('/view-order/{order_code}',[App\Http\Controllers\OrderController::class, 'view_order']);
+Route::get('/view-order/{order_id}',[App\Http\Controllers\OrderController::class, 'view_order']);
 Route::post('/update-order-qty',[App\Http\Controllers\OrderController::class, 'update_order_qty']);
 Route::post('/update-qty',[App\Http\Controllers\OrderController::class, 'update_qty']);
 

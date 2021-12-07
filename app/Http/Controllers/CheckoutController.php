@@ -38,7 +38,6 @@ class CheckoutController extends Controller
 
          $checkout_code = substr(md5(microtime()),rand(0,26),5);
 
-  
          $order = new Order;
          $order->customer_id = $_SESSION['customer_id'];
          $order->shipping_id = $shipping_id;
@@ -199,13 +198,16 @@ class CheckoutController extends Controller
         $meta_keywords = "Đăng nhập thanh toán";
         $meta_title = "Đăng nhập thanh toán";
         $url_canonical = $request->url();
+        $slider = Slider::orderBy('slider_id','DESC')->where('slider_status','1')->take(4)->get();
         //--seo 
         $cate_product = DB::table('tbl_category_product')->where('category_status','0')->orderby('category_id','desc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status','0')->orderby('brand_id','desc')->get(); 
-        return view('pages.checkout.payment')->with('category',$cate_product)->with('brand',$brand_product)->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical);
+        return view('pages.checkout.payment')->with('category',$cate_product)->with('brand',$brand_product)->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical)->with('slider',$slider);
 
     }
     public function order_place(Request $request){
+        echo $request->ThanhTien;
+        $slider = Slider::orderBy('slider_id','DESC')->where('slider_status','1')->take(4)->get();
         //insert payment_method
         //seo 
         $meta_desc = "Đăng nhập thanh toán"; 
@@ -215,38 +217,36 @@ class CheckoutController extends Controller
         //--seo 
         $data = array();
         $data['payment_method'] = $request->payment_option;
-        $data['payment_status'] = 'Đang chờ xử lý';
-        $payment_id = DB::table('tbl_payment')->insertGetId($data);
+        $data['payment_status'] = 'Đang chờ xử lí';
+        //$payment_id = DB::table('tbl_payment')->insertGetId($data);
 
         //insert order
         $order_data = array();
         $order_data['customer_id'] = Session::get('customer_id');
         $order_data['shipping_id'] = Session::get('shipping_id');
-        $order_data['payment_id'] = $payment_id;
-        $order_data['order_total'] = Cart::total();
-        $order_data['order_status'] = 'Đang chờ xử lý';
-        $order_id = DB::table('tbl_order')->insertGetId($order_data);
+        //$order_data['payment_id'] = $payment_id;
+        $order_data['order_total'] = $request->ThanhTien;
+        $order_data['order_status'] = 'Đang chờ xử lí';
+        //$order_id = DB::table('tbl_order')->insertGetId($order_data);
 
         //insert order_details
-        $content = Cart::content();
+        $content = session::get("cart");
         foreach($content as $v_content){
-            $order_d_data['order_id'] = $order_id;
-            $order_d_data['product_id'] = $v_content->id;
-            $order_d_data['product_name'] = $v_content->name;
-            $order_d_data['product_price'] = $v_content->price;
-            $order_d_data['product_sales_quantity'] = $v_content->qty;
-            DB::table('tbl_order_details')->insert($order_d_data);
+            //$order_d_data['order_id'] = $order_id;
+            $order_d_data['product_id'] = $v_content['product_id'];
+            $order_d_data['product_name'] = $v_content['product_name'];
+            $order_d_data['product_price'] = $v_content['product_price'];
+            $order_d_data['product_sales_quantity'] = $v_content['product_qty'];
+            //DB::table('tbl_order_details')->insert($order_d_data);
         }
         if($data['payment_method']==1){
 
             echo 'Thanh toán thẻ ATM';
 
         }elseif($data['payment_method']==2){
-            Cart::destroy();
-
             $cate_product = DB::table('tbl_category_product')->where('category_status','0')->orderby('category_id','desc')->get();
             $brand_product = DB::table('tbl_brand')->where('brand_status','0')->orderby('brand_id','desc')->get(); 
-            return view('pages.checkout.handcash')->with('category',$cate_product)->with('brand',$brand_product)->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical);
+            return view('pages.checkout.handcash')->with('mess',$request->all())->with('category',$cate_product)->with('brand',$brand_product)->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical)->with('slider',$slider);
 
         }else{
             echo 'Thẻ ghi nợ';

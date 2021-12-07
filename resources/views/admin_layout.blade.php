@@ -188,13 +188,6 @@
 	<section class="wrapper">
         @yield('admin_content')
     </section>
- <!-- footer -->
-		  <div class="footer">
-			<div class="wthree-copyright">
-			  <p>Các bạn xem hướng dẫn tạo project  : <a target="_blank" href="https://www.youtube.com/watch?v=CjA79XhHVQI&list=PLWTu87GngvNxpWN6FVuEcS-YvFNq6RnqG">tại đây nhé</a></p>
-			</div>
-		  </div>
-  <!-- / footer -->
 </section>
 <!--main content end-->
 </section>
@@ -305,7 +298,7 @@
         if(j==0){
           
                 $.ajax({
-                        url : '{{url('/update-order-qty')}}',
+                        url : "{{url('/update-order-qty')}}",
                             method: 'POST',
                             data:{_token:_token, order_status:order_status ,order_id:order_id ,quantity:quantity, order_product_id:order_product_id},
                             success:function(data){
@@ -326,7 +319,7 @@
         function fetch_delivery(){
             var _token = $('input[name="_token"]').val();
              $.ajax({
-                url : '{{url('/select-feeship')}}',
+                url :"{{url('/select-feeship')}}",
                 method: 'POST',
                 data:{_token:_token},
                 success:function(data){
@@ -358,16 +351,12 @@
            var wards = $('.wards').val();
            var fee_ship = $('.fee_ship').val();
             var _token = $('input[name="_token"]').val();
-           // alert(city);
-           // alert(province);
-           // alert(wards);
-           // alert(fee_ship);
             $.ajax({
-                url : '{{url('/insert-delivery')}}',
+                url : "{{url('/insert-delivery')}}",
                 method: 'POST',
                 data:{city:city, province:province, _token:_token, wards:wards, fee_ship:fee_ship},
                 success:function(data){
-                   fetch_delivery();
+                    fetch_delivery()
                 }
             });
 
@@ -388,7 +377,7 @@
                 result = 'wards';
             }
             $.ajax({
-                url : '{{url('/select-delivery')}}',
+                url : "{{url('/select-delivery')}}",
                 method: 'POST',
                 data:{action:action,ma_id:ma_id,_token:_token},
                 success:function(data){

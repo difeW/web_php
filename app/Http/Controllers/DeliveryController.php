@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use DB;
 use App\Models\City;
 use App\Models\Province;
 use App\Models\Wards;
 use App\Models\Feeship;
+use Illuminate\Support\Facades\Redirect;
+session_start();
 class DeliveryController extends Controller
 {
 	public function update_delivery(Request $request){
@@ -56,8 +58,10 @@ class DeliveryController extends Controller
 	}
 	public function insert_delivery(Request $request){
 		$data = $request->all();
-		$fee_ship = new Feeship();
-		$fee_ship->fee_matp = $data['city'];
+
+		$fee_ship = new Feeship;
+
+		$fee_ship->fee_matp = $data['city'];     	
 		$fee_ship->fee_maqh = $data['province'];
 		$fee_ship->fee_xaid = $data['wards'];
 		$fee_ship->fee_feeship = $data['fee_ship'];

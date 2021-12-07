@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use DB;
 use App\Models\Feeship;
 use App\Models\Shipping;
 use App\Models\Order;
 use App\Models\OrderDetails;
+use App\Http\Controllers\Session;
 use App\Models\Customer;
 use App\Models\Coupon;
 use App\Models\Product;
@@ -17,9 +18,9 @@ use PDF;
 class OrderController extends Controller
 {
 	public function order_code(Request $request ,$order_code){
-		$order = Order::where('order_code',$order_code)->first();
+		$order = Order::where('order_id',$order_code)->first();
 		$order->delete();
-		 Session::put('message','Xóa đơn hàng thành công');
+		$_Session['message'] = 'Xóa đơn hàng thành công';
         return redirect()->back();
 
 	}
@@ -76,8 +77,8 @@ class OrderController extends Controller
 		return $pdf->stream();
 	}
 	public function print_order_convert($checkout_code){
-		$order_details = OrderDetails::where('order_code',$checkout_code)->get();
-		$order = Order::where('order_code',$checkout_code)->get();
+		$order_details = OrderDetails::where('order_id',$checkout_code)->get();
+		$order = Order::where('order_id',$checkout_code)->get();
 		foreach($order as $key => $ord){
 			$customer_id = $ord->customer_id;
 			$shipping_id = $ord->shipping_id;
@@ -85,7 +86,7 @@ class OrderController extends Controller
 		$customer = Customer::where('customer_id',$customer_id)->first();
 		$shipping = Shipping::where('shipping_id',$shipping_id)->first();
 
-		$order_details_product = OrderDetails::with('product')->where('order_code', $checkout_code)->get();
+		$order_details_product = OrderDetails::with('product')->where('order_id', $checkout_code)->get();
 
 		foreach($order_details_product as $key => $order_d){
 
@@ -259,8 +260,8 @@ class OrderController extends Controller
 
 	}
 	public function view_order($order_code){
-		$order_details = OrderDetails::with('product')->where('order_code',$order_code)->get();
-		$order = Order::where('order_code',$order_code)->get();
+		$order_details = OrderDetails::with('product')->where('order_id',$order_code)->get();
+		$order = Order::where('order_id',$order_code)->get();
 		foreach($order as $key => $ord){
 			$customer_id = $ord->customer_id;
 			$shipping_id = $ord->shipping_id;
@@ -269,26 +270,29 @@ class OrderController extends Controller
 		$customer = Customer::where('customer_id',$customer_id)->first();
 		$shipping = Shipping::where('shipping_id',$shipping_id)->first();
 
-		$order_details_product = OrderDetails::with('product')->where('order_code', $order_code)->get();
+		$order_details_product = OrderDetails::with('product')->where('order_id', $order_code)->get();
 
-		foreach($order_details_product as $key => $order_d){
+		// foreach($order_details_product as $key => $order_d){
 
-			$product_coupon = $order_d->product_coupon;
-		}
-		if($product_coupon != 'no'){
-			$coupon = Coupon::where('coupon_code',$product_coupon)->first();
-			$coupon_condition = $coupon->coupon_condition;
-			$coupon_number = $coupon->coupon_number;
-		}else{
-			$coupon_condition = 2;
-			$coupon_number = 0;
-		}
+		// 	$product_coupon = $order_d->product_coupon;
+		// }
+		// if($product_coupon != 'no'){
+		// 	$coupon = Coupon::where('coupon_code',$product_coupon)->first();
+		// 	$coupon_condition = $coupon->coupon_condition;
+		// 	$coupon_number = $coupon->coupon_number;
+		// }else{
+		// 	$coupon_condition = 2;
+		// 	$coupon_number = 0;
+		// }
 		
-		return view('admin.view_order')->with(compact('order_details','customer','shipping','order_details','coupon_condition','coupon_number','order','order_status'));
+		return view('admin.view_order')->with(compact('order_details','customer','shipping','order_details','order','order_status'));//,'coupon_condition','coupon_number'
 
 	}
     public function manage_order(){
-    	$order = Order::orderby('created_at','DESC')->paginate(5);
+    	$order = DB::table('tbl_order')
+		->join('tbl_customers', 'tbl_customers.customer_id','=','tbl_order.customer_id')
+		->select('tbl_order.*', 'tbl_customers.customer_name')
+		->orderby('tbl_order.order_id','desc')->get();
     	return view('admin.manage_order')->with(compact('order'));
     }
 }

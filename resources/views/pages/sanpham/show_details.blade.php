@@ -39,7 +39,7 @@
 								<p>Mã ID: {{$value->product_id}}</p>
 								<img src="images/product-details/rating.png" alt="" />
 								
-								<form action="{{URL::to('/save-cart')}}" method="POST">
+								<form>
 									@csrf
 									<input type="hidden" value="{{$value->product_id}}" class="cart_product_id_{{$value->product_id}}">
 
@@ -56,7 +56,7 @@
 									<input name="qty" type="number" min="1" class="cart_product_qty_{{$value->product_id}}"  value="1" />
 									<input name="productid_hidden" type="hidden"  value="{{$value->product_id}}" />
 								</span>
-								<input type="submit" value="Thêm giỏ hàng" class="btn btn-primary btn-sm add-to-cart" data-id_product="{{$value->product_id}}" name="add-to-cart">
+								<input type="button" value="Thêm giỏ hàng" class="btn btn-primary btn-sm add-to-cart" data-id_product="{{$value->product_id}}" name="add-to-cart">
 								</form>
 
 								<p><b>Tình trạng:</b> Còn hàng</p>

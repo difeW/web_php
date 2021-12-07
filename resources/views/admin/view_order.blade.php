@@ -175,30 +175,8 @@
             <td>{{number_format($details->product_price ,0,',','.')}}đ</td>
             <td>{{number_format($subtotal ,0,',','.')}}đ</td>
           </tr>
+          
         @endforeach
-          <tr>
-            <td colspan="2">  
-            @php 
-                $total_coupon = 0;
-              @endphp
-              @if($coupon_condition==1)
-                  @php
-                  $total_after_coupon = ($total*$coupon_number)/100;
-                  echo 'Tổng giảm :'.number_format($total_after_coupon,0,',','.').'</br>';
-                  $total_coupon = $total + $details->product_feeship - $total_after_coupon ;
-                  @endphp
-              @else 
-                  @php
-                  echo 'Tổng giảm :'.number_format($coupon_number,0,',','.').'k'.'</br>';
-                  $total_coupon = $total + $details->product_feeship - $coupon_number ;
-
-                  @endphp
-              @endif
-
-              Phí ship : {{number_format($details->product_feeship,0,',','.')}}đ</br> 
-             Thanh toán: {{number_format($total_coupon,0,',','.')}}đ 
-            </td>
-          </tr>
           <tr>
             <td colspan="6">
               @foreach($order as $key => $or)
@@ -241,8 +219,9 @@
             </td>
           </tr>
         </tbody>
+        <a target="_blank" href="{{url('/print-order/'.$details->order_id)}}">In đơn hàng</a>
       </table>
-      <a target="_blank" href="{{url('/print-order/'.$details->order_code)}}">In đơn hàng</a>
+
     </div>
    
   </div>
