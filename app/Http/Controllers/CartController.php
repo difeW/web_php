@@ -195,8 +195,17 @@ class CartController extends Controller
     public function update_cart_quantity(Request $request){
         $rowId = $request->rowId_cart;
         $qty = $request->cart_quantity;
-        Cart::update($rowId,$qty);
-        return Redirect::to('/show-cart');
+        $cart = Session::get('cart');
+        foreach($cart as $session => $val){
+            if($val['session_id']==$rowId ){
+
+                $cart[$session]['product_qty'] = $qty;
+                break;
+            }
+        }
+
+        Session::put('cart',$cart);
+        return Redirect::back();
     }
     
 }

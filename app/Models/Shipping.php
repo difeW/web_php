@@ -9,7 +9,7 @@ class Shipping extends Model
 {
     public $timestamps = false; //set time to false
     protected $fillable = [
-        'shipping_name', 'shipping_address', 'shipping_phone','shipping_email','shipping_notes','shipping_address'
+        'shipping_name', 'shipping_address', 'shipping_phone','shipping_email','shipping_notes','shipping_address','shipping_customer_id'
     ];
     protected $primaryKey = 'shipping_id';
  	protected $table = 'tbl_shipping';

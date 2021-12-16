@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\Models\Feeship;
 use App\Models\Shipping;
+use App\Models\Slider;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Http\Controllers\Session;
@@ -24,7 +25,7 @@ class OrderController extends Controller
         return redirect()->back();
 
 	}
-	public function update_qty(Request $request){
+	public function update_qty(Request $request){	
 		$data = $request->all();
 		$order_details = OrderDetails::where('product_id',$data['order_product_id'])->where('order_code',$data['order_code'])->first();
 		$order_details->product_sales_quantity = $data['order_qty'];
@@ -295,4 +296,29 @@ class OrderController extends Controller
 		->orderby('tbl_order.order_id','desc')->get();
     	return view('admin.manage_order')->with(compact('order'));
     }
+
+	public function show_detail_order($order_id, request $request)
+	{
+		$slider = Slider::orderBy('slider_id','DESC')->where('slider_status','1')->take(4)->get();
+        $meta_desc = "Đăng nhập thanh toán"; 
+        $meta_keywords = "Đăng nhập thanh toán";
+        $meta_title = "Đăng nhập thanh toán";
+		$order_details = OrderDetails::with('product')->where('order_id',$order_id)->get();
+		$order = Order::where('order_id',$order_id)->get();
+		foreach($order as $key => $ord){
+			$customer_id = $ord->customer_id;
+			$shipping_id = $ord->shipping_id;
+			$order_status = $ord->order_status;
+		}
+		$customer = Customer::where('customer_id',$customer_id)->first();
+		$shipping = Shipping::where('shipping_id',$shipping_id)->first();
+
+		$order_details_product = OrderDetails::with('product')->where('order_id', $order_id)->get();
+
+
+        $url_canonical = $request->url();
+        $cate_product = DB::table('tbl_category_product')->where('category_status','0')->orderby('category_id','desc')->get();
+        $brand_product = DB::table('tbl_brand')->where('brand_status','0')->orderby('brand_id','desc')->get(); 
+        return view('pages.checkout.detail_order')->with(compact('order_details','customer','shipping','order_details','order','order_status'))->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical)->with('slider',$slider)->with('category',$cate_product)->with('brand',$brand_product);
+	} 
 }

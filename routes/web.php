@@ -136,11 +136,14 @@ Route::get('/dang-nhap',[App\Http\Controllers\CheckoutController::class, 'login_
 Route::get('/del-fee',[App\Http\Controllers\CheckoutController::class, 'del_fee']);
 
 Route::get('/logout-checkout',[App\Http\Controllers\CheckoutController::class, 'logout_checkout']);
+Route::get('/handcash',[App\Http\Controllers\CheckoutController::class, 'handcash']);
+Route::get('/order-detail/{order_id}',[App\Http\Controllers\OrderController::class, 'show_detail_order']);
 Route::post('/add-customer',[App\Http\Controllers\CheckoutController::class, 'add_customer']);
 Route::post('/order-place',[App\Http\Controllers\CheckoutController::class, 'order_place']);
 Route::post('/login-customer',[App\Http\Controllers\CheckoutController::class, 'login_customer']);
 Route::get('/checkout',[App\Http\Controllers\CheckoutController::class, 'checkout']);
-Route::get('/payment',[App\Http\Controllers\CheckoutController::class, 'payment']);
+Route::get('/payment/{ship_id}',[App\Http\Controllers\CheckoutController::class, 'payment']);
+Route::get('/delete-shipping/{ship_id}',[App\Http\Controllers\CheckoutController::class, 'delete_shipping']);
 Route::post('/save-checkout-customer',[App\Http\Controllers\CheckoutController::class, 'save_checkout_customer']);
 Route::post('/calculate-fee',[App\Http\Controllers\CheckoutController::class, 'calculate_fee']);
 Route::post('/select-delivery-home',[App\Http\Controllers\CheckoutController::class, 'select_delivery_home']);
@@ -170,4 +173,4 @@ Route::post('/insert-slider',[App\Http\Controllers\CheckoutController::class, 'i
 Route::get('/unactive-slide/{slide_id}',[App\Http\Controllers\SliderController::class, 'unactive_slide']);
 Route::get('/active-slide/{slide_id}',[App\Http\Controllers\SliderController::class, 'active_slide']);
 
-
+Route::get('/shipping',[App\Http\Controllers\CheckoutController::class, 'show_shipping']);

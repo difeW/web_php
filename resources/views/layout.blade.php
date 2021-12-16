@@ -141,8 +141,24 @@
                                    $customer_id = Session::get('customer_id');
                                    if($customer_id!=NULL){ 
                                  ?>
-                                  <li><a href="{{URL::to('/logout-checkout')}}"><i class="fa fa-lock"></i> Đăng xuất</a></li>
-                                
+                                  <li class="dropdown">
+                                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                            <span class="username">
+                                                <?php
+                                                $name = Session::get('customer_name');
+                                                if($name){
+                                                    echo $name;
+                                                }
+                                                ?>
+                                            </span>
+                                            <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu extended logout">
+                                            <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                                            <li><a href="{{URL::to('/handcash')}}"><i class="fa fa-cog"></i> Đơn mua</a></li>
+                                            <li><a href="{{URL::to('/logout-checkout')}}"><i class="fa fa-lock"></i> Đăng xuất</a></li>
+                                        </ul>
+                                    </li>                            
                                 <?php
                             }else{
                                  ?>
@@ -470,8 +486,8 @@
     <script type="text/javascript">
 
           $(document).ready(function(){
-            $('.send_order').click(function(){
-                swal({
+            $('.send-order').click(function(){
+                Swal.fire({
                   title: "Xác nhận đơn hàng",
                   text: "Đơn hàng sẽ không được hoàn trả khi đặt,bạn có muốn đặt không?",
                   type: "warning",

@@ -18,11 +18,16 @@
 
 			
 			<div class="review-payment">
+				<p><b>Tên</b> {{$ship->shipping_name}}</p>
+                <p><b>Địa chỉ:</b> {{$ship->shipping_address}}</p>
+                <p><b>Số điện thoại</b> {{$ship->shipping_phone}}</p>
 				<h2>Xem lại giỏ hàng</h2>
 			</div>
 			<div class="table-responsive cart_info">
 
-
+<?php
+	$total = 0;
+?>
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
@@ -37,6 +42,9 @@
 					<tbody>
 						@foreach($content as $v_content)
 						<tr>
+							<?php
+								$total += $v_content['product_price']*$v_content['product_qty'];
+							?>
 							<td class="cart_product">
 								<a href=""><img src="{{URL::to('public/uploads/product/'.$v_content['product_image'])}}" width="90" alt="" /></a>
 							</td>
@@ -74,9 +82,16 @@
 					</tbody>
 				</table>
 			</div>
-			<h4 style="margin:40px 0;font-size: 20px;">Chọn hình thức thanh toán</h4>
-			<form method="POST" action="{{URL::to('/order-place')}}">
+
+			<form action="{{URL::to('/order-place')}}" method="POST">
 				{{ csrf_field() }}
+				<input type="hidden" name ="shipid" value ="{{$ship->shipping_id}}">
+
+			<div>
+				<h4 style="padding-left:10px ; font-size: 20px;">Thành tiền: </h4>
+				<label style="padding-left:10px ; font-size: 20px;"><input name="thanhtien" value="{{$total}}" type="hidden"> {{number_format($total,0,',','.')}}đ</label>
+			</div>
+			<h4 style="margin:40px 0;font-size: 20px;">Chọn hình thức thanh toán</h4>
 			<div class="payment-options">
 					<span>
 						<label><input name="payment_option" value="1" type="checkbox"> Trả bằng thẻ ATM</label>
@@ -87,7 +102,7 @@
 					<span>
 						<label><input name="payment_option" value="3" type="checkbox"> Thanh toán thẻ ghi nợ</label>
 					</span>
-					<input type="submit" value="Đặt hàng" name="send_order_place" class="btn btn-primary btn-sm">
+					<button type="submit" class="btn btn-primary btn-sm">Đặt hàng</button>
 			</div>
 			</form>
 		</div>

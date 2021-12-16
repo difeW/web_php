@@ -90,7 +90,7 @@
 
 							<td>
 								@if(Session::get('customer_id'))
-	                          	<a class="btn btn-default check_out" href="{{url('/checkout')}}">Đặt hàng</a>
+	                          	<a class="btn btn-default check_out" href="{{url('/shipping')}}">Đặt hàng</a>
 	                          	@else 
 	                          	<a class="btn btn-default check_out" href="{{url('/dang-nhap')}}">Đặt hàng</a>
 								@endif
